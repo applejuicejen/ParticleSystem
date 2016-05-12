@@ -8,6 +8,7 @@
 #include <QOpenGLWindow>
 #include "Emitter.h"
 #include "Cell.h"
+#include "Grid.h"
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
 /// @brief this class inherits from the Qt OpenGLWindow and allows us to use NGL to draw OpenGL
@@ -156,7 +157,9 @@ private:
     int m_particle_timer;
 
     Emitter m_ps;
-    Cell cell;
+    //Cell cell;
+    Grid m_grid;
+    float m_grid_size;
 
 };
 

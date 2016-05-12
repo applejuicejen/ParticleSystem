@@ -64,8 +64,10 @@ void NGLScene::initializeGL()
 
   /*===CAMERA===*/
   //creating static camera
-  ngl::Vec3 from(-50,1,100);
-  ngl::Vec3 to(0,0,0);
+
+  m_grid_size = 40;
+  ngl::Vec3 from(m_grid_size*0.5, m_grid_size*0.5,100);
+  ngl::Vec3 to(m_grid_size*0.5,m_grid_size*0.5,0);
   ngl::Vec3 up(0,1,0);
 
   m_cam.set(from,to,up);
@@ -99,12 +101,13 @@ void NGLScene::initializeGL()
   m_timerValue = 5;
   startSimTimer();
 
-  m_ps.Initialize(200000, ngl::Vec3(-2, 30, 0), ngl::Vec3(0, 0, 0), 1, 0.3);
+  m_ps.Initialize(200000, ngl::Vec3(m_grid_size*0.5, 50, m_grid_size*0.5), ngl::Vec3(0, 0, 0), 1, 0.3);
   m_ps.setTimestep((float)m_timerValue/1000.0f);
-  cell.Initialize();
-  ngl::Real size = 30;
-  cell.setSize(size);
-  cell.setGravity(ngl::Vec3(5.5,0,0));
+  //cell.Initialize();
+  //ngl::Real size = 30;
+  //cell.setSize(size);
+  //cell.setGravity(ngl::Vec3(5.5,0,0));
+  m_grid.Initialize(m_grid_size, 5);
 
 }
 
@@ -140,13 +143,16 @@ void NGLScene::paintGL()
   MV=trans.getMatrix()*m_cam.getViewMatrix() ;
   MVP=MV*m_cam.getProjectionMatrix() ;
 
+  MVP = m_mouseGlobalTX*m_cam.getVPMatrix();
+
   ngl::ShaderLib *shader=ngl::ShaderLib::instance();
 
   (*shader)["Colour"]->use();
   shader->setShaderParamFromMat4("MVP",MVP);
   //cell.Draw();
   m_ps.Draw();
-  cell.Draw();
+  m_grid.Draw();
+  //cell.Draw();
 
 
 

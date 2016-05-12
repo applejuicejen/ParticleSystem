@@ -41,11 +41,9 @@ void Emitter::Emit()
 
         if(active_particles >= particlesPF)
         {
-          i = m_particles.size();
-          std::cout<< "about to break!"<<std::endl;
+          //i = m_particles.size();
           break;
         }
-        std::cout<<"active particles "<< active_particles <<std::endl;
         m_last_emission = m_current_time;
       }
     }
