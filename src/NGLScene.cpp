@@ -68,7 +68,7 @@ void NGLScene::initializeGL()
   //creating static camera
 
   m_grid_size = 40;
-  m_grid_divs = 6;
+  m_grid_divs = 2;
   ngl::Vec3 from(m_grid_size*0.5, m_grid_size*0.5,100);
   ngl::Vec3 to(m_grid_size*0.5,m_grid_size*0.5,0);
   ngl::Vec3 up(0,1,0);

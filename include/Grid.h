@@ -19,9 +19,6 @@ public:
 private:
 
   int m_size;
-
-
-
 };
 
 #endif // GRID_H

@@ -8,6 +8,7 @@ Grid::Grid()
 void Grid::Initialize(float _size, int _divisions)
 {
   Cell c;
+  int count = 0;
   ngl::Real cell_size = _size/_divisions;
   for(int i = 0; i < _divisions; i ++)
   {
@@ -15,12 +16,14 @@ void Grid::Initialize(float _size, int _divisions)
     {
       for(int k = 0; k < _divisions; k++)
       {
+        c.Initialize(count);
         c.setPosition(ngl::Vec3((k*cell_size)+cell_size*0.5,
                                 (j*cell_size)+cell_size*0.5,
                                 (i*cell_size)+cell_size*0.5));
         c.setForce(ngl::Vec3(100,0,0));
         c.setSize(cell_size);
         m_cells.push_back(c);
+        count++;
       }
     }
   }

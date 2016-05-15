@@ -8,7 +8,7 @@ class Cell
 {
 public:
   Cell();
-  void Initialize();
+  void Initialize(int _ID);
   void Update(float _timestep);
   void Reset();
   void setCell();
@@ -30,6 +30,8 @@ public:
   void setSize(ngl::Real _size){ m_size = _size;}
 
   void setForce(ngl::Vec3 _force){m_force = _force;}
+  ngl::Vec3 getGradient(){return m_gradient;}
+  ngl::Vec3 setGradient(ngl::Vec3 _gradient){m_gradient = _gradient;}
 
   ngl::Vec3 m_force;
 
@@ -40,9 +42,9 @@ private:
   ngl::Vec3 m_gravity;
   float m_pressure;
   ngl::Real m_size;
+  ngl::Vec3 m_gradient;
 
-
-
+  std::vector<ngl::Vec3> m_gradients;
   std::vector<ngl::Vec3> m_square;
 };
 #endif // CELL_H

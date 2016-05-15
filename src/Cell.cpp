@@ -3,6 +3,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include <random>
+
+typedef std::mt19937 rng_type;
+std::uniform_int_distribution<rng_type::result_type> udist(0, 12);
+
+rng_type rng;
 #include <ngl/NGLInit.h>
 
 Cell::Cell()
@@ -10,17 +16,46 @@ Cell::Cell()
 
 }
 
-void Cell::Initialize()
+void Cell::Initialize(int _ID)
 {
-  m_position = ngl::Vec3(0,0,0);
+  ngl::Vec3 g0 = (0,1,1);
+  ngl::Vec3 g1 = (0,1,-1);
+  ngl::Vec3 g2 = (0,-1,1);
+  ngl::Vec3 g3 = (0,-1,-1);
+  ngl::Vec3 g4 = (1,0,1);
+  ngl::Vec3 g5 = (1,0,-1);
+  ngl::Vec3 g6 = (-1,0,1);
+  ngl::Vec3 g7 = (-1,0,-1);
+  ngl::Vec3 g8 = (1,1,0);
+  ngl::Vec3 g9 = (1,-1,0);
+  ngl::Vec3 g10 = (-1,1,0);
+  ngl::Vec3 g11 = (-1,-1,0);
+
+  m_gradients.push_back(g0);
+  m_gradients.push_back(g1);
+  m_gradients.push_back(g2);
+  m_gradients.push_back(g3);
+  m_gradients.push_back(g4);
+  m_gradients.push_back(g5);
+  m_gradients.push_back(g6);
+  m_gradients.push_back(g7);
+  m_gradients.push_back(g8);
+  m_gradients.push_back(g9);
+  m_gradients.push_back(g10);
+  m_gradients.push_back(g11);
+
+  rng_type::result_type const seedval = _ID;
+  rng.seed(seedval);
+
+  rng_type::result_type random_number = udist(rng);
+
+  m_gradient = m_gradients[random_number];
+  std::cout<<"gradient " <<m_gradient.m_x<< ", "<< m_gradient.m_y << ", " << m_gradient.m_z<<std::endl;
+
 }
 
 void Cell::setCell()
 {
-  //m_square.push_back(ngl::Vec3(m_position.m_x-half_size,m_position.m_y+half_size, 0));
-  //m_square.push_back(ngl::Vec3(m_position.m_x+half_size,m_position.m_y+half_size, 0));
-  //m_square.push_back(ngl::Vec3(m_position.m_x-half_size,m_position.m_y-half_size, 0));
-  //m_square.push_back(ngl::Vec3(m_position.m_x+half_size,m_position.m_y+half_size, 0));
 
 }
 
