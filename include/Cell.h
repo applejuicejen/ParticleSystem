@@ -29,6 +29,10 @@ public:
   ngl::Real getSize(){return m_size;}
   void setSize(ngl::Real _size){ m_size = _size;}
 
+  void setForce(ngl::Vec3 _force){m_force = _force;}
+
+  ngl::Vec3 m_force;
+
 private:
   ngl::Vec3 m_position;
   ngl::Vec3 m_velocity;
@@ -36,6 +40,7 @@ private:
   ngl::Vec3 m_gravity;
   float m_pressure;
   ngl::Real m_size;
+
 
 
   std::vector<ngl::Vec3> m_square;

@@ -160,6 +160,7 @@ private:
     //Cell cell;
     Grid m_grid;
     float m_grid_size;
+    int m_grid_divs;
 
 };
 

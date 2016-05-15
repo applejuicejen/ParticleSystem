@@ -54,56 +54,56 @@ void Cell::Draw()
   p.pos = ngl::Vec3(ngl::Vec3(m_position.m_x - half_size,
                               m_position.m_y + half_size,
                               m_position.m_z + half_size));
-  p.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  p.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(p);
 
   data p1;
   p1.pos = ngl::Vec3(ngl::Vec3(m_position.m_x - half_size,
                                m_position.m_y + half_size,
                                m_position.m_z - half_size));
-  p1.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  p1.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(p1);
 
   data q;
   q.pos = ngl::Vec3(ngl::Vec3(m_position.m_x + half_size,
                               m_position.m_y + half_size,
                               m_position.m_z + half_size));
-  q.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  q.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(q);
 
   data q1;
   q1.pos = ngl::Vec3(ngl::Vec3(m_position.m_x + half_size,
                                m_position.m_y + half_size,
                               m_position.m_z - half_size));
-  q1.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  q1.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(q1);
 
   data s;
   s.pos = ngl::Vec3(ngl::Vec3(m_position.m_x + half_size,
                               m_position.m_y - half_size,
                               m_position.m_z + half_size));
-  s.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  s.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(s);
 
   data s1;
   s1.pos = ngl::Vec3(ngl::Vec3(m_position.m_x + half_size,
                                m_position.m_y - half_size,
                                m_position.m_z - half_size));
-  s1.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  s1.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(s1);
 
   data r;
   r.pos = ngl::Vec3(ngl::Vec3(m_position.m_x-half_size,
                               m_position.m_y-half_size,
                               m_position.m_z + half_size));
-  r.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  r.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(r);
 
   data r1;
   r1.pos = ngl::Vec3(ngl::Vec3(m_position.m_x-half_size,
                                m_position.m_y-half_size,
                                m_position.m_z - half_size));
-  r1.colour = ngl::Vec3(1.0, 0.0, 0.0);
+  r1.colour = ngl::Vec3(0.7, 0.7, 0.7);
   points.push_back(r1);
 
   const static GLubyte indices[]=  {

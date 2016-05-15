@@ -14,13 +14,14 @@ public:
   void Update(float _timestep);
   void Reset();
   void Draw();
+  std::vector<Cell> m_cells;
 
 private:
 
   int m_size;
 
 
-  std::vector<Cell> m_cells;
+
 };
 
 #endif // GRID_H

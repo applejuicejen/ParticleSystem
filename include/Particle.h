@@ -9,6 +9,7 @@ class Particle
 public:
   Particle(bool _active, int _ID);
   void Update(float _timestep);
+  void addForce(ngl::Vec3);
   void Reset();
   ngl::Vec3 getPosition(){return m_position;}
   void setPosition(ngl::Vec3 _position){m_position = _position;}
@@ -37,8 +38,10 @@ public:
   bool getActive(){return m_active;}
   void setActive(float _active){m_active = _active;}
 
-private:
   ngl::Vec3 m_position;
+
+private:
+
   ngl::Vec3 m_velocity;
   ngl::Vec3 m_force;
   ngl::Vec3 m_init_position;

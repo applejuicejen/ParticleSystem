@@ -17,8 +17,11 @@ public:
   float getTimestep(){return m_dt;}
   void setTimestep(float _timestep){m_dt = _timestep;}
 
-private:
+  std::vector<Particle> getParticleList(){return m_particles;}
   std::vector<Particle> m_particles;
+
+private:
+
   std::vector<Particle> m_active_particles;
   ngl::Vec3 m_gravity;
   float m_emission_rate=0.0;

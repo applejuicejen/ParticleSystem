@@ -26,7 +26,7 @@ void Emitter::Initialize(float _num_particles,  ngl::Vec3 _initial_pos, ngl::Vec
 
 void Emitter::Emit()
 {
-  float particlesPF = 200;
+  float particlesPF = 50;
   if(m_current_time > m_last_emission + m_emission_rate)
   {
     int active_particles = 0;

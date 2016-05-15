@@ -6,7 +6,9 @@
 #include <ngl/ShaderLib.h>
 #include <ngl/VAOPrimitives.h>
 #include <iostream>
+#include <cmath>
 #include "Emitter.h"
+
 
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
@@ -66,6 +68,7 @@ void NGLScene::initializeGL()
   //creating static camera
 
   m_grid_size = 40;
+  m_grid_divs = 6;
   ngl::Vec3 from(m_grid_size*0.5, m_grid_size*0.5,100);
   ngl::Vec3 to(m_grid_size*0.5,m_grid_size*0.5,0);
   ngl::Vec3 up(0,1,0);
@@ -96,18 +99,18 @@ void NGLScene::initializeGL()
   shader->setShaderParam4f("Colour",1.0,1.0,0.0,1);
   //glEnable(GL_BLEND);
   //glBlendFunc(GL_ONE, GL_ONE);
-  glPointSize(1);
+  glPointSize(2);
 
   m_timerValue = 5;
   startSimTimer();
 
-  m_ps.Initialize(200000, ngl::Vec3(m_grid_size*0.5, 50, m_grid_size*0.5), ngl::Vec3(0, 0, 0), 1, 0.3);
+  m_ps.Initialize(12200, ngl::Vec3(m_grid_size/2, 50, m_grid_size/2), ngl::Vec3(0, 0, 0), 1.3, 0.6);
   m_ps.setTimestep((float)m_timerValue/1000.0f);
   //cell.Initialize();
   //ngl::Real size = 30;
   //cell.setSize(size);
   //cell.setGravity(ngl::Vec3(5.5,0,0));
-  m_grid.Initialize(m_grid_size, 5);
+  m_grid.Initialize(m_grid_size, m_grid_divs);
 
 }
 
@@ -149,10 +152,10 @@ void NGLScene::paintGL()
 
   (*shader)["Colour"]->use();
   shader->setShaderParamFromMat4("MVP",MVP);
-  //cell.Draw();
+
   m_ps.Draw();
   m_grid.Draw();
-  //cell.Draw();
+
 
 
 
@@ -254,6 +257,37 @@ void NGLScene::timerEvent( QTimerEvent *_event)
 {
   if(_event->timerId()== m_timer)
   {
+    int size = m_ps.getParticleList().size();
+    for (int i = 0; i < m_ps.m_particles.size(); i ++)
+    {
+      ngl::Vec3 pos = m_ps.m_particles[i].m_position;
+      //
+      pos/=(m_grid_size/m_grid_divs);
+      //std::cout<<"pos after division "<< pos.m_x<<", " << pos.m_y<<", "<<pos.m_z<<std::endl;
+
+      int x = (int)pos.m_x;
+      int y = (int)pos.m_y;
+      int z = (int)pos.m_z;
+
+      //
+      int cell_num = x + (y * m_grid_divs) + (z * pow(m_grid_divs, 2));
+
+
+      if(cell_num < 0 || x >= m_grid_divs || y >= m_grid_divs || z >= m_grid_divs)
+      {
+        continue;
+      }
+      else
+      {
+        //std::cout<< "tester weee"<<std::endl;
+        //std::cout<<"pos before division "<< pos.m_x<<", " << pos.m_y<<", "<<pos.m_z<<std::endl;
+        //std::cout<< "x " << x << " " << "y "<< y << "z "<<z<<std::endl;
+        m_ps.m_particles[i].addForce(m_grid.m_cells[cell_num].m_force);
+        //std::cout<<"cell num "<< cell_num<<std::endl;
+      }
+
+    }
+    //std::cout<< "BLOOOOOOOOB"<<std::endl;
     m_ps.Update();
   }
 
