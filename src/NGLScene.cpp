@@ -68,7 +68,7 @@ void NGLScene::initializeGL()
   //creating static camera
 
   m_grid_size = 40;
-  m_grid_divs = 2;
+  m_grid_divs = 6;
   ngl::Vec3 from(m_grid_size*0.5, m_grid_size*0.5,100);
   ngl::Vec3 to(m_grid_size*0.5,m_grid_size*0.5,0);
   ngl::Vec3 up(0,1,0);
@@ -257,40 +257,31 @@ void NGLScene::timerEvent( QTimerEvent *_event)
 {
   if(_event->timerId()== m_timer)
   {
-    int size = m_ps.getParticleList().size();
     for (int i = 0; i < m_ps.m_particles.size(); i ++)
     {
       ngl::Vec3 pos = m_ps.m_particles[i].m_position;
-      //
+
       pos/=(m_grid_size/m_grid_divs);
-      //std::cout<<"pos after division "<< pos.m_x<<", " << pos.m_y<<", "<<pos.m_z<<std::endl;
 
       int x = (int)pos.m_x;
       int y = (int)pos.m_y;
       int z = (int)pos.m_z;
 
-      //
       int cell_num = x + (y * m_grid_divs) + (z * pow(m_grid_divs, 2));
 
 
-      if(cell_num < 0 || x >= m_grid_divs || y >= m_grid_divs || z >= m_grid_divs)
+      if(x < 0 || y < 0 || z < 0 || x >= m_grid_divs || y >= m_grid_divs || z >= m_grid_divs)
       {
         continue;
       }
       else
       {
-        //std::cout<< "tester weee"<<std::endl;
-        //std::cout<<"pos before division "<< pos.m_x<<", " << pos.m_y<<", "<<pos.m_z<<std::endl;
-        //std::cout<< "x " << x << " " << "y "<< y << "z "<<z<<std::endl;
         m_ps.m_particles[i].addForce(m_grid.m_cells[cell_num].m_force);
-        //std::cout<<"cell num "<< cell_num<<std::endl;
       }
 
     }
-    //std::cout<< "BLOOOOOOOOB"<<std::endl;
     m_ps.Update();
   }
-
   update();
 
 }

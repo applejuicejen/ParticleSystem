@@ -31,9 +31,10 @@ public:
 
   void setForce(ngl::Vec3 _force){m_force = _force;}
   ngl::Vec3 getGradient(){return m_gradient;}
-  ngl::Vec3 setGradient(ngl::Vec3 _gradient){m_gradient = _gradient;}
+  void setGradient(ngl::Vec3 _gradient){m_gradient = _gradient;}
 
   ngl::Vec3 m_force;
+  std::vector<int> m_neighbours;
 
 private:
   ngl::Vec3 m_position;
