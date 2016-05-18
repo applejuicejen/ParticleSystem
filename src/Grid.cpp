@@ -80,11 +80,26 @@ void Grid::Initialize(float _size, int _divisions)
         m_cells[i].m_neighbours.push_back(nbr6);
       }
     }
+
+    for(int j = 0; j < m_cells[i].m_neighbours.size(); j++)
+    {
+      m_cells[i].m_gradients.push_back(m_cells[m_cells[i].m_neighbours[j]].getGradient());
+    }
   }
-//  for(int i = 0; i < m_cells[0].m_neighbours.size(); i++)
-//  {
-//    std::cout<<"neighbour "<< i <<": "<< m_cells[0].m_neighbours[i]<<std::endl;
-//  }
+
+  std::cout<<"number of neighbours: "<< m_cells[0].m_neighbours.size()<<std::endl;
+  std::cout<<"number of gradients: "<< m_cells[0].m_gradients.size()<<std::endl;
+
+
+  for(int i = 0; i < m_cells[0].m_neighbours.size(); i++)
+  {
+    std::cout<<"neighbour: " << m_cells[0].m_neighbours[i]<<
+               " gradient: "<< m_cells[0].m_gradients[i].m_x<<
+               ", " << m_cells[0].m_gradients[i].m_y<<
+               ", " << m_cells[0].m_gradients[i].m_z<< std::endl;
+  }
+
+
 
 }
 

@@ -4,7 +4,8 @@
 #include <cstdlib>
 #include <time.h>
 #include <random>
-#include <ngl/NGLInit.h>
+//#include <ngl/NGLInit.h>
+#include "ngl/VertexArrayObject.h"
 
 Cell::Cell()
 {
@@ -26,18 +27,18 @@ void Cell::Initialize(int _ID)
   ngl::Vec3 g10(-1,1,0);
   ngl::Vec3 g11(-1,-1,0);
 
-  m_gradients.push_back(g0);
-  m_gradients.push_back(g1);
-  m_gradients.push_back(g2);
-  m_gradients.push_back(g3);
-  m_gradients.push_back(g4);
-  m_gradients.push_back(g5);
-  m_gradients.push_back(g6);
-  m_gradients.push_back(g7);
-  m_gradients.push_back(g8);
-  m_gradients.push_back(g9);
-  m_gradients.push_back(g10);
-  m_gradients.push_back(g11);
+  m_gradient_set.push_back(g0);
+  m_gradient_set.push_back(g1);
+  m_gradient_set.push_back(g2);
+  m_gradient_set.push_back(g3);
+  m_gradient_set.push_back(g4);
+  m_gradient_set.push_back(g5);
+  m_gradient_set.push_back(g6);
+  m_gradient_set.push_back(g7);
+  m_gradient_set.push_back(g8);
+  m_gradient_set.push_back(g9);
+  m_gradient_set.push_back(g10);
+  m_gradient_set.push_back(g11);
 
   std::random_device generator;
   std::mt19937 rng(generator());
@@ -46,9 +47,10 @@ void Cell::Initialize(int _ID)
 
   int random_number = distribution(rng);
 
-  m_gradient = m_gradients[random_number];
-  //std::cout<<"random number: "<<random_number<<std::endl;
-  //std::cout<<"gradient " <<m_gradient.m_x<< ", "<< m_gradient.m_y << ", " << m_gradient.m_z<<std::endl;
+  m_gradient = m_gradient_set[random_number];
+//  std::cout<<"random number: "<<random_number<<std::endl;
+//std::cout<<"cell " << _ID << " gradient: " <<m_gradient.m_x<< ", "<< m_gradient.m_y << ", " << m_gradient.m_z<<std::endl;
+
 
 }
 

@@ -35,6 +35,9 @@ public:
 
   ngl::Vec3 m_force;
   std::vector<int> m_neighbours;
+  std::vector<ngl::Vec3> m_gradients;
+
+
 
 private:
   ngl::Vec3 m_position;
@@ -45,7 +48,7 @@ private:
   ngl::Real m_size;
   ngl::Vec3 m_gradient;
 
-  std::vector<ngl::Vec3> m_gradients;
+  std::vector<ngl::Vec3> m_gradient_set;
   std::vector<ngl::Vec3> m_square;
 };
 #endif // CELL_H
