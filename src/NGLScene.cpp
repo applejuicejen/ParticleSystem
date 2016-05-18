@@ -277,8 +277,9 @@ void NGLScene::timerEvent( QTimerEvent *_event)
       }
       else
       {
-        Noise::ComputeNoise(m_ps.m_particles[i].m_position, m_grid.m_cells[cell_num].m_gradients);
-        m_ps.m_particles[i].addForce(m_grid.m_cells[cell_num].m_force);
+          Noise::ComputeNoise(m_ps.m_particles[i].m_position, m_grid.m_cells[cell_num].getPosition(),
+                              m_grid_size, m_grid_divs, m_grid.m_cells[cell_num].m_gradients);
+          m_ps.m_particles[i].addForce(m_grid.m_cells[cell_num].m_force);
       }
 
     }
