@@ -36,11 +36,12 @@ public:
   ngl::Vec3 m_force;
   std::vector<int> m_neighbours;
   std::vector<ngl::Vec3> m_gradients;
+  ngl::Vec3 m_position;
 
 
 
 private:
-  ngl::Vec3 m_position;
+
   ngl::Vec3 m_velocity;
   ngl::Vec3 m_init_velocity;
   ngl::Vec3 m_gravity;

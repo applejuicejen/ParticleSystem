@@ -68,9 +68,9 @@ void NGLScene::initializeGL()
   /*===CAMERA===*/
   //creating static camera
 
-  m_grid_size = 40;
-  m_grid_divs = 2;
-  ngl::Vec3 from(m_grid_size*0.5, m_grid_size*0.5,100);
+  m_grid_size = 500;
+  m_grid_divs = 12;
+  ngl::Vec3 from(m_grid_size*0.55, m_grid_size*0.5, m_grid_size*2);
   ngl::Vec3 to(m_grid_size*0.5,m_grid_size*0.5,0);
   ngl::Vec3 up(0,1,0);
 
@@ -105,7 +105,7 @@ void NGLScene::initializeGL()
   m_timerValue = 5;
   startSimTimer();
 
-  m_ps.Initialize(12200, ngl::Vec3(m_grid_size/2, 50, m_grid_size/2), ngl::Vec3(0, 0, 0), 1.3, 0.6);
+  m_ps.Initialize(1, ngl::Vec3(m_grid_size/2, 120, m_grid_size/2), ngl::Vec3(0, 0, 0), 1.0, 0.06);
   m_ps.setTimestep((float)m_timerValue/1000.0f);
   //cell.Initialize();
   //ngl::Real size = 30;
@@ -271,15 +271,47 @@ void NGLScene::timerEvent( QTimerEvent *_event)
       int cell_num = x + (y * m_grid_divs) + (z * pow(m_grid_divs, 2));
 
 
+      ngl::Vec3 point = m_ps.m_particles[i].m_position;
+      ngl::Vec3 cell = m_grid.m_cells[cell_num].m_position;
+      int x_sign = 1;
+      int y_sign = 1;
+      int z_sign = 1;
+
+      if(point.m_x < cell.m_x)
+      {
+        x_sign = -1;
+      }
+      if(point.m_y < cell.m_y)
+      {
+        y_sign = -1;
+      }
+      if(point.m_z < cell.m_z)
+      {
+        z_sign = -1;
+      }
+
+      std::vector<ngl::Vec3> gradients;
+      findGradients(cell_num, x, y, z, gradients);
+      findGradients(cell_num, x, y, (z + z_sign), gradients);
+      findGradients(cell_num, x, (y + y_sign), z, gradients);
+      findGradients(cell_num, x, (y + y_sign), (z + z_sign), gradients);
+
+      findGradients(cell_num, (x + x_sign), y, z, gradients);
+      findGradients(cell_num, (x + x_sign), y, (z + z_sign), gradients);
+      findGradients(cell_num, (x + x_sign), (y + y_sign), z, gradients);
+      findGradients(cell_num, (x + x_sign), (y + y_sign), (z + z_sign), gradients);
+
       if(x < 0 || y < 0 || z < 0 || x >= m_grid_divs || y >= m_grid_divs || z >= m_grid_divs)
       {
         continue;
       }
       else
       {
-          Noise::ComputeNoise(m_ps.m_particles[i].m_position, m_grid.m_cells[cell_num].getPosition(),
-                              m_grid_size, m_grid_divs, m_grid.m_cells[cell_num].m_gradients);
-          m_ps.m_particles[i].addForce(m_grid.m_cells[cell_num].m_force);
+
+          ngl::Vec3 noise = Noise::ComputeNoise(m_ps.m_particles[i].m_position, m_grid.m_cells[cell_num].getPosition(),
+                              m_grid_size, m_grid_divs, gradients);
+          std::cout<<"noise " << noise.m_x <<", "<< noise.m_y << ", " << noise.m_z << std::endl;
+          m_ps.m_particles[i].addForce((noise * 80));
       }
 
     }
@@ -297,4 +329,21 @@ void NGLScene::startSimTimer()
 void NGLScene::stopSimTimer()
 {
  killTimer(m_timer);
+}
+
+void NGLScene::findGradients(int _cell_num, int _x, int _y, int _z, std::vector<ngl::Vec3> &_gradients )
+{
+
+  int index = _cell_num;
+
+  index =  _x + (_y * m_grid_divs) + ((_z) * pow(m_grid_divs, 2));
+
+  if((_x < m_grid_divs && _x >= 0) && (_y < m_grid_divs && _y >= 0) && _z < m_grid_divs && _z >= 0)
+  {
+    _gradients.push_back(m_grid.m_cells[index].getGradient());
+  }
+  else
+  {
+    _gradients.push_back(ngl::Vec3(0,0,0));
+  }
 }

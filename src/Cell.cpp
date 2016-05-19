@@ -14,6 +14,7 @@ Cell::Cell()
 
 void Cell::Initialize(int _ID)
 {
+  float scale = 1;
   ngl::Vec3 g0(0,1,1);
   ngl::Vec3 g1(0,1,-1);
   ngl::Vec3 g2(0,-1,1);
@@ -23,26 +24,26 @@ void Cell::Initialize(int _ID)
   ngl::Vec3 g6(-1,0,1);
   ngl::Vec3 g7(-1,0,-1);
   ngl::Vec3 g8(1,1,0);
-  ngl::Vec3 g9(1,-1,0);
+  //ngl::Vec3 g9(1,-1,0);
   ngl::Vec3 g10(-1,1,0);
-  ngl::Vec3 g11(-1,-1,0);
+  //ngl::Vec3 g11(-1,-1,0);
 
-  m_gradient_set.push_back(g0);
-  m_gradient_set.push_back(g1);
-  m_gradient_set.push_back(g2);
-  m_gradient_set.push_back(g3);
-  m_gradient_set.push_back(g4);
-  m_gradient_set.push_back(g5);
-  m_gradient_set.push_back(g6);
-  m_gradient_set.push_back(g7);
-  m_gradient_set.push_back(g8);
-  m_gradient_set.push_back(g9);
-  m_gradient_set.push_back(g10);
-  m_gradient_set.push_back(g11);
+  m_gradient_set.push_back(g0*scale);
+  m_gradient_set.push_back(g1*scale);
+  m_gradient_set.push_back(g2*scale);
+  m_gradient_set.push_back(g3*scale);
+  m_gradient_set.push_back(g4*scale);
+  m_gradient_set.push_back(g5*scale);
+  m_gradient_set.push_back(g6*scale);
+  m_gradient_set.push_back(g7*scale);
+  m_gradient_set.push_back(g8*scale);
+  //m_gradient_set.push_back(g9*scale);
+  m_gradient_set.push_back(g10*scale);
+  //m_gradient_set.push_back(g11*scale);
 
   std::random_device generator;
   std::mt19937 rng(generator());
-  std::uniform_int_distribution<int> distribution(0,11);
+  std::uniform_int_distribution<int> distribution(0, m_gradient_set.size()-1);
 
 
   int random_number = distribution(rng);
