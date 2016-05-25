@@ -1,20 +1,29 @@
 #include "Emitter.h"
 #include <ngl/NGLInit.h>
+#include <random>
+#include <cstdlib>
 
 Emitter::Emitter()
 {
 
 }
 
-void Emitter::Initialize(float _num_particles,  ngl::Vec3 _initial_pos, ngl::Vec3 _initial_vel, float _lifespan, float _mass)
+void Emitter::Initialize(float _num_particles,  ngl::Vec3 _initial_pos, float _range, ngl::Vec3 _initial_vel, float _lifespan, float _mass)
 {
   for(int i = 0; i < _num_particles; i++)
   {
+
     ngl::Vec3 line = _initial_pos;
-    //line.m_x = i*0.1;
+
+     srand(i);
+     ngl::Vec3 init_pos = ngl::Vec3(_initial_pos.m_x + static_cast <float>(rand())/static_cast<float> (RAND_MAX/(_range/2)),
+                                    _initial_pos.m_y,
+                                    _initial_pos.m_x + static_cast <float>(rand())/static_cast<float> (RAND_MAX/(_range/2)));
+
+    line.m_x = i*0.1;
     Particle p(false,i);
-    p.setPosition(line);
-    p.setInitPosition(line);
+    p.setPosition(_initial_pos);
+    p.setInitPosition(init_pos);
     p.setLifespan(_lifespan);
     p.setMass(_mass);
     p.setVelocity(_initial_vel);

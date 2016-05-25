@@ -9,7 +9,7 @@ class Emitter
 {
 public:
   Emitter();
-  void Initialize(float _num_particles,  ngl::Vec3 _initial_pos, ngl::Vec3 _initial_vel, float _lifespan, float _mass);
+  void Initialize(float _num_particles,  ngl::Vec3 _initial_pos, float _range, ngl::Vec3 _initial_vel, float _lifespan, float _mass);
   void Emit();
   void Update();
   void Draw();

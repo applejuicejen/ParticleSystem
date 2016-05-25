@@ -30,6 +30,7 @@ public:
   void setSize(ngl::Real _size){ m_size = _size;}
 
   void setForce(ngl::Vec3 _force){m_force = _force;}
+  void setCellForces(float _size);
   ngl::Vec3 getGradient(){return m_gradient;}
   void setGradient(ngl::Vec3 _gradient){m_gradient = _gradient;}
 

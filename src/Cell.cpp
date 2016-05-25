@@ -55,6 +55,22 @@ void Cell::Initialize(int _ID)
 
 }
 
+void Cell::setCellForces(float _grid_size)
+{
+      ngl::Real size = _grid_size*0.5;
+        //y/(x^2 + y^2)^(1/2), -x/(x^2 + y^2)^(1/2)
+//        m_force = ngl::Vec3(m_position.m_x / pow((pow(m_position.m_z, 2) +
+//                                                  pow(m_position.m_x,2)),0.5),
+//                            0,
+//                           -m_position.m_z / pow(pow(m_position.m_z, 2) +
+//                                                 pow(m_position.m_x, 2),0.5));
+      //std::cout<<"m_force: "<< m_position.m_x  - size <<", "<< m_position.m_y <<", "<<m_position.m_z-size<<std::endl;
+          m_force = ngl::Vec3(-(m_position.m_z - size), 0, m_position.m_x -size);
+          m_force.normalize();
+        //std::cout<<"m_force: "<< m_force.m_x <<", "<< m_force.m_y <<", "<<m_force.m_z<<std::endl;
+}
+
+
 void Cell::setCell()
 {
 

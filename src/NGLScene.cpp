@@ -14,11 +14,11 @@
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
 //----------------------------------------------------------------------------------------------------------------------
-const static float INCREMENT=0.05;
+const static float INCREMENT=2.1;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //----------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=5.0;
+const static float ZOOM=15.0;
 
 NGLScene::NGLScene(int _timer)
 {
@@ -69,13 +69,13 @@ void NGLScene::initializeGL()
   //creating static camera
 
   m_grid_size = 500;
-  m_grid_divs = 12;
-  ngl::Vec3 from(m_grid_size*0.55, m_grid_size*0.5, m_grid_size*2);
-  ngl::Vec3 to(m_grid_size*0.5,m_grid_size*0.5,0);
+  m_grid_divs = 4;
+  ngl::Vec3 from(m_grid_size/2,m_grid_size/2,2000);
+  ngl::Vec3 to(m_grid_size/2,m_grid_size/2,m_grid_size/2);
   ngl::Vec3 up(0,1,0);
 
   m_cam.set(from,to,up);
-  m_cam.setShape(45,(float)720.0f/576.0f, 0.001,150);
+  m_cam.setShape(45,(float)720.0f/576.0f, 0.001,2500);
 
   /*===SHADERS===*/
   // grab an instance of shader manager
@@ -100,12 +100,12 @@ void NGLScene::initializeGL()
   shader->setShaderParam4f("Colour",1.0,1.0,0.0,1);
   //glEnable(GL_BLEND);
   //glBlendFunc(GL_ONE, GL_ONE);
-  glPointSize(2);
+  glPointSize(3);
 
-  m_timerValue = 5;
+  m_timerValue = 15;
   startSimTimer();
 
-  m_ps.Initialize(1, ngl::Vec3(m_grid_size/2, 120, m_grid_size/2), ngl::Vec3(0, 0, 0), 1.0, 0.06);
+  m_ps.Initialize(10000, ngl::Vec3(0, m_grid_size, 0), m_grid_size*2, ngl::Vec3(0, 0, 0), 6.0, 0.6);
   m_ps.setTimestep((float)m_timerValue/1000.0f);
   //cell.Initialize();
   //ngl::Real size = 30;
@@ -115,6 +115,75 @@ void NGLScene::initializeGL()
 
 }
 
+void NGLScene::timerEvent( QTimerEvent *_event)
+{
+  if(_event->timerId()== m_timer)
+  {
+    for (int i = 0; i < m_ps.m_particles.size(); i ++)
+    {
+      ngl::Vec3 pos = m_ps.m_particles[i].m_position;
+      pos/=(m_grid_size/m_grid_divs);
+
+      int x = (int)pos.m_x;
+      int y = (int)pos.m_y;
+      int z = (int)pos.m_z;
+
+      int cell_num = x + (y * m_grid_divs) + (z * pow(m_grid_divs, 2));
+
+
+//      ngl::Vec3 point = m_ps.m_particles[i].m_position;
+//      ngl::Vec3 cell = m_grid.m_cells[cell_num].m_position;
+//      int x_sign = 1;
+//      int y_sign = 1;
+//      int z_sign = 1;
+
+//      if(point.m_x < cell.m_x)
+//      {
+//        x_sign = -1;
+//      }
+//      if(point.m_y < cell.m_y)
+//      {
+//        y_sign = -1;
+//      }
+//      if(point.m_z < cell.m_z)
+//      {
+//        z_sign = -1;
+//      }
+
+//      std::vector<ngl::Vec3> gradients;
+//      findGradients(cell_num, x, y, z, gradients);
+//      findGradients(cell_num, x, y, (z + z_sign), gradients);
+//      findGradients(cell_num, x, (y + y_sign), z, gradients);
+//      findGradients(cell_num, x, (y + y_sign), (z + z_sign), gradients);
+
+//      findGradients(cell_num, (x + x_sign), y, z, gradients);
+//      findGradients(cell_num, (x + x_sign), y, (z + z_sign), gradients);
+//      findGradients(cell_num, (x + x_sign), (y + y_sign), z, gradients);
+//      findGradients(cell_num, (x + x_sign), (y + y_sign), (z + z_sign), gradients);
+
+      if(x < 0 || y < 0 || z < 0 || x >= m_grid_divs || y >= m_grid_divs || z >= m_grid_divs)
+      {
+        continue;
+      }
+      else
+      {
+
+//          ngl::Vec3 noise = Noise::ComputeNoise(m_ps.m_particles[i].m_position, m_grid.m_cells[cell_num].getPosition(),
+//                              m_grid_size, m_grid_divs, gradients);
+//          std::cout<<"noise " << noise.m_x <<", "<< noise.m_y << ", " << noise.m_z << std::endl;
+            ngl::Vec3 f = m_grid.m_cells[cell_num].m_force*70;
+            ngl::Vec3 direction = ngl::Vec3(m_grid_size/2,m_grid_size/2,m_grid_size/2)-m_ps.m_particles[i].m_position;
+
+            m_ps.m_particles[i].addForce(f+(direction*0.9));
+      }
+
+    }
+    //std::cout<<"paraaaaaaa"<<std::endl;
+    m_ps.Update();
+  }
+  update();
+
+}
 
 
 void NGLScene::paintGL()
@@ -155,7 +224,7 @@ void NGLScene::paintGL()
   shader->setShaderParamFromMat4("MVP",MVP);
 
   m_ps.Draw();
-  m_grid.Draw();
+  //m_grid.Draw();
 
 
 
@@ -163,6 +232,8 @@ void NGLScene::paintGL()
 
 
 }
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 void NGLScene::mouseMoveEvent (QMouseEvent * _event)
@@ -254,72 +325,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
 
     update();
 }
-void NGLScene::timerEvent( QTimerEvent *_event)
-{
-  if(_event->timerId()== m_timer)
-  {
-    for (int i = 0; i < m_ps.m_particles.size(); i ++)
-    {
-      ngl::Vec3 pos = m_ps.m_particles[i].m_position;
 
-      pos/=(m_grid_size/m_grid_divs);
-
-      int x = (int)pos.m_x;
-      int y = (int)pos.m_y;
-      int z = (int)pos.m_z;
-
-      int cell_num = x + (y * m_grid_divs) + (z * pow(m_grid_divs, 2));
-
-
-      ngl::Vec3 point = m_ps.m_particles[i].m_position;
-      ngl::Vec3 cell = m_grid.m_cells[cell_num].m_position;
-      int x_sign = 1;
-      int y_sign = 1;
-      int z_sign = 1;
-
-      if(point.m_x < cell.m_x)
-      {
-        x_sign = -1;
-      }
-      if(point.m_y < cell.m_y)
-      {
-        y_sign = -1;
-      }
-      if(point.m_z < cell.m_z)
-      {
-        z_sign = -1;
-      }
-
-      std::vector<ngl::Vec3> gradients;
-      findGradients(cell_num, x, y, z, gradients);
-      findGradients(cell_num, x, y, (z + z_sign), gradients);
-      findGradients(cell_num, x, (y + y_sign), z, gradients);
-      findGradients(cell_num, x, (y + y_sign), (z + z_sign), gradients);
-
-      findGradients(cell_num, (x + x_sign), y, z, gradients);
-      findGradients(cell_num, (x + x_sign), y, (z + z_sign), gradients);
-      findGradients(cell_num, (x + x_sign), (y + y_sign), z, gradients);
-      findGradients(cell_num, (x + x_sign), (y + y_sign), (z + z_sign), gradients);
-
-      if(x < 0 || y < 0 || z < 0 || x >= m_grid_divs || y >= m_grid_divs || z >= m_grid_divs)
-      {
-        continue;
-      }
-      else
-      {
-
-          ngl::Vec3 noise = Noise::ComputeNoise(m_ps.m_particles[i].m_position, m_grid.m_cells[cell_num].getPosition(),
-                              m_grid_size, m_grid_divs, gradients);
-          std::cout<<"noise " << noise.m_x <<", "<< noise.m_y << ", " << noise.m_z << std::endl;
-          m_ps.m_particles[i].addForce((noise * 80));
-      }
-
-    }
-    m_ps.Update();
-  }
-  update();
-
-}
 
 void NGLScene::startSimTimer()
 {
